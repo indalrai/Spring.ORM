@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+<bean id="transactionManager"
+ class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+ <property name="sessionFactory" ref="sessionFactory"/>
+ </bean>
+ <tx:annotation-driven/>
+ 
+
+	<bean class=" org.apache.commons.dbcp.BasicDataSource"
+		name="myDataSource">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/Career" />
+		<property name="username" value="root" />
+		<property name="password" value="Indal@123" />
+	</bean>
+
+	<!-- <bean name="session__Factory" class="org.springframework.orm.hibernate5.annotation.AnnotationSessionFactoryBean"> 
+		<property name="dataSource" ref="datSource" /> <property name="annotatedClasses"> 
+		<list> <value>com.SpringORM.dao.Student</value> </list> </property> <property 
+		name="hibernateProperties"> <props> <prop key="hibernate.dialect">or.hibernate.dialect.MySQL8Dialect</prop> 
+		<prop key="hibernate.show_sql">true</prop> <prop key="hibernate.hbm2ddl.auto">create</prop> 
+		</props> </property> </bean> <bean class="org.springframework.orm.hibernate5.HibernateTemplate" 
+		name="template"> <property name="sessionFactory" ref="session__Factory" /> 
+		</bean> -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="mappingResources">
+			<list>
+				<value> com.SpringORM.dao.Student</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MSQL8Dialect
+			</value>
+		</property>
+	</bean>
+
+	<bean class="com.SpringORM.dao.StudentDao" name="studentDao">
+		<property name="hibernateTemplate" ref="template" />
+	</bean>
+
+
+
+</beans>
